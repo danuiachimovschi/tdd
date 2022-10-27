@@ -18,4 +18,4 @@ yarn-error.log
 /.vscode
 /tmp
 /_docker
-
+docker-compose.yml
