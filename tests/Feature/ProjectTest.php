@@ -18,7 +18,7 @@ class ProjectTest extends TestCase
     public function only_auth_user_can_create_project()
     {
         $user = User::factory()->create();
-        $this->actingAs($user);
+        $this->be($user);
 
         $data = [
             'title' => $this->faker->name(),
@@ -68,7 +68,7 @@ class ProjectTest extends TestCase
     {
         $attributes = Project::factory()->raw(['title' => '']);
 
-        $this->actingAs(User::factory()->create());
+        $this->be(User::factory()->create());
         
         $this->post('/projects',$attributes)->assertSessionHasErrors('title');
     }
@@ -82,7 +82,7 @@ class ProjectTest extends TestCase
 
         $attributes = Project::factory()->raw(['description' => '']);
 
-        $this->actingAs($user);
+        $this->be($user);
 
         $this->post('/projects',$attributes)->assertSessionHasErrors('description');
     }
@@ -94,7 +94,7 @@ class ProjectTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user);
+        $this->be($user);
 
         $project = Project::factory()->create(['id_owner' => $user->id]);
         
@@ -108,7 +108,7 @@ class ProjectTest extends TestCase
     {
         $attributes = Project::factory()->raw(['id_owner' => null]);
 
-        $this->actingAs(User::factory()->create());
+        $this->be(User::factory()->create());
 
         $this->post('/projects',$attributes)->assertSessionHasErrors('id_owner');
     }
