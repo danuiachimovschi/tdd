@@ -12,24 +12,28 @@ class ProjectTest extends TestCase
 {
     use WithFaker;
 
+    protected $user;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+    }
+
     /**
      * @test
      */
     public function only_auth_user_can_create_project()
     {
-        $user = User::factory()->create();
-        $this->be($user);
-
         $data = [
             'title' => $this->faker->name(),
             'description' => $this->faker->sentence(),
-            'id_owner' => $user->id
+            'id_owner' => $this->user->id
         ];
-        
+
+        $this->be($this->user);
         $this->post('/projects', $data)->assertRedirect('/projects');
-
         $this->assertDatabaseHas('projects', $data);
-
         $this->get('/projects')->assertSee($data['title']);
 
     }
@@ -40,6 +44,7 @@ class ProjectTest extends TestCase
     public function guest_can_not_create_project()
     {
         $project = Project::factory()->raw();
+        
         $this->post('/projects', $project)->assertRedirect('login');
     }
 
@@ -68,8 +73,7 @@ class ProjectTest extends TestCase
     {
         $attributes = Project::factory()->raw(['title' => '']);
 
-        $this->be(User::factory()->create());
-        
+        $this->be($this->user);
         $this->post('/projects',$attributes)->assertSessionHasErrors('title');
     }
 
@@ -78,12 +82,9 @@ class ProjectTest extends TestCase
      */
     public function a_project_require_a_description()
     {
-        $user = User::factory()->create();
-
         $attributes = Project::factory()->raw(['description' => '']);
 
-        $this->be($user);
-
+        $this->be($this->user);
         $this->post('/projects',$attributes)->assertSessionHasErrors('description');
     }
 
@@ -92,12 +93,9 @@ class ProjectTest extends TestCase
      */
     public function only_auth_user_can_view_a_project()
     {
-        $user = User::factory()->create();
+        $project = Project::factory()->create(['id_owner' => $this->user->id]);
 
-        $this->be($user);
-
-        $project = Project::factory()->create(['id_owner' => $user->id]);
-        
+        $this->be($this->user);
         $this->get($project->path())->assertSee($project->title);
     }
 
@@ -108,8 +106,7 @@ class ProjectTest extends TestCase
     {
         $attributes = Project::factory()->raw(['id_owner' => null]);
 
-        $this->be(User::factory()->create());
-
+        $this->be($this->user);
         $this->post('/projects',$attributes)->assertSessionHasErrors('id_owner');
     }
 
@@ -119,10 +116,9 @@ class ProjectTest extends TestCase
 
     public function an_auth_user_can_view_projects_from_other()
     {
-        $this->be(User::factory()->create());
-
         $project = Project::factory()->create();
 
+        $this->be($this->user);
         $this->get($project->path())->assertStatus(403);
     }
 }
