@@ -47,8 +47,8 @@ class User extends Authenticatable
         return $this->hasMany(Project::class, 'id_owner', 'id');
     }
 
-    public function isNotOwner($id)
+    public function isOwner($id)
     {
-        return $this->id != $id;
+        return $this->id == $id;
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProjectRequest;
 
 class ProjectController extends Controller
@@ -23,10 +24,15 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        if(auth()->user()->isNotOwner($project->id_owner)){
-            abort(403);
+        if (Auth::user()->can('view', $project)) {
+            return view('project.show', compact('project'));
         }
-        
-        return view('project.show', compact('project'));
+
+        abort(403);
+    }
+
+    public function create()
+    {
+        return view('project.create');
     }
 }

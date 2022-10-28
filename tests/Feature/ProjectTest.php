@@ -4,10 +4,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
-use Illuminate\Http\ResponseTrait;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
 class ProjectTest extends TestCase
 {
     use WithFaker;
@@ -32,6 +29,7 @@ class ProjectTest extends TestCase
         ];
 
         $this->be($this->user);
+        $this->get('/projects/create')->assertStatus(200);
         $this->post('/projects', $data)->assertRedirect('/projects');
         $this->assertDatabaseHas('projects', $data);
         $this->get('/projects')->assertSee($data['title']);
@@ -43,27 +41,12 @@ class ProjectTest extends TestCase
     */
     public function guest_can_not_create_project()
     {
-        $project = Project::factory()->raw();
-        
-        $this->post('/projects', $project)->assertRedirect('login');
-    }
 
-    /**
-    * @test
-    */
-    public function guest_can_not_view_a_single_project()
-    {
         $project = Project::factory()->make();
 
-        $this->post($project->path())->assertRedirect('login');
-    }
-
-    /**
-     * @test
-     */
-    public function guest_may_not_view_projects()
-    {
         $this->get('/projects')->assertRedirect('login');
+        $this->post($project->path())->assertRedirect('login');
+        $this->post('/projects', $project->toArray())->assertRedirect('login');
     }
 
     /**
@@ -104,10 +87,17 @@ class ProjectTest extends TestCase
      */
     public function only_auth_user_can_view_an_owner()
     {
-        $attributes = Project::factory()->raw(['id_owner' => null]);
+        $attributes = Project::factory()->raw([]);
 
-        $this->be($this->user);
-        $this->post('/projects',$attributes)->assertSessionHasErrors('id_owner');
+        $this->post('/projects',$attributes)->assertRedirect('login');
+    }
+
+    /**
+     * @test
+     */
+    public function only_auth_user_can_view_page_create_project()
+    {
+        $this->get('/projects/create')->assertRedirect('login');
     }
 
     /**
