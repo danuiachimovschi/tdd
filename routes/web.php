@@ -19,6 +19,7 @@ use App\Http\Controllers\ProjectController;
 //Auth
 
 Route::get('/login', [LoginController::class, 'index']);
+Route::get('/logout', [LoginController::class, 'logout'])->name("logout");
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 //Core

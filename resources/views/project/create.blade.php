@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -34,4 +34,8 @@
         </p>
       </div>
 </body>
-</html>
+</html> --}}
+
+<x-layouts.main>
+  
+</x-layouts.main>

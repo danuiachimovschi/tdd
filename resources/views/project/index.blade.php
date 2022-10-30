@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,4 +17,16 @@
         <h1>Nothing</h1>
     @endforelse
 </body>
-</html>
+</html> --}}
+
+<x-layouts.main>
+    @forelse ($projects as $project)
+    <x-project.project
+        title="{{ $project->title }}" 
+        description="{{ $project->description }}" 
+        owner="{{ $project->owner->name }}">
+    </x-project.project>
+    @empty
+    <h1>Nothing</h1>
+    @endforelse
+</x-layouts.main>

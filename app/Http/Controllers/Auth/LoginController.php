@@ -25,4 +25,11 @@ class LoginController extends Controller
   
         return redirect("login")->withError('Login details are not valid');
     }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect('login');
+    }
 }
