@@ -7,7 +7,7 @@
     <title>@yield('title')</title>
     @vite('resources/css/app.css')
 </head>
-<body>
+<body class="h-[100vh]">
     <nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900">
         <div class="container flex flex-wrap justify-between items-center mx-auto">
         <a href="https://flowbite.com/" class="flex items-center">
@@ -54,7 +54,7 @@
         </div>
         </div>
       </nav>
-      <div class="w-[1200px] mt-5  mx-auto ">
+      <div class="w-[1200px] mt-20  mx-auto flex justify-center items-center">
         {{ $slot }}
       </div>
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>

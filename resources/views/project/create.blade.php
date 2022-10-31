@@ -1,41 +1,33 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>create Project</title>
-</head>
-<body>
-    <div class="w-full max-w-xs">
-        <form action="{{ route("projects.store") }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            @csrf
-            @method("POST")
-          <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="Title">
-              Title
-            </label>
-            <input name="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="title" type="text" placeholder="Title">
-          </div>
-          <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
-              Description
-            </label>
-            <input name="description" class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="text" placeholder="description">
-          </div>
-          <div class="flex items-center justify-between">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-              Create Project
-            </button>
-          </div>
-        </form>
-        <p class="text-center text-gray-500 text-xs">
-          &copy;2020 Acme Corp. All rights reserved.
-        </p>
-      </div>
-</body>
-</html> --}}
-
 <x-layouts.main>
-  
+  @section('title')
+  Create Project
+  @endsection
+  <div class="flex flex-col">
+    <h1 class="text-3xl font-extrabold dark:text-white mb-6">Create Project</h1>
+    <form action="{{ route('projects.store') }}" method="POST" class="h-[300px] w-[400px]">
+        @csrf
+        @method("POST")
+        <div class="mb-2">
+            <label for="success" class="block mb-2 text-sm font-medium">Project Title</label>
+            <input 
+            name="title" 
+            type="text" 
+            class="bg-gray-50 border  text-green-900  text-sm rounded-lg  block w-full p-2.5 dark:bg-gray-700 " 
+            placeholder="Title"
+            value="{{ old('title', '') }}"
+            >
+        </div>
+         @error('title') 
+          <p class="text-sm font-bold text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span></p>
+         @enderror 
+        <div>
+          <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Project Description</label>
+          <textarea id="message" rows="4" name="description" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Project Description"></textarea>
+        </div>
+        @error('description') 
+          <p class="text-sm font-bold text-red-600 dark:text-red-500"><span class="font-medium">{{ $message }}</span></p>
+        @enderror 
+        <button type="submit" class="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create Project</button>
+    </form>
+  </div>
 </x-layouts.main>
