@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 class ProjectTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @test
      */
