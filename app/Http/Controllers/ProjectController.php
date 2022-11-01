@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ProjectRequest;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {

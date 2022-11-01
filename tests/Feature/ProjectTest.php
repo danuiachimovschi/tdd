@@ -4,31 +4,28 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 class ProjectTest extends TestCase
 {
-    use WithFaker;
+    use WithFaker, RefreshDatabase;
 
-    protected $user;
-
-    public function setUp(): void
+    public function projectData()
     {
-        parent::setUp();
-        $this->user = User::factory()->create();
+        return [
+            'title' => $this->faker->name(),
+            'description' => $this->faker->sentence(),
+        ];
     }
-
     /**
      * @test
      */
     public function only_auth_user_can_create_project()
     {
-        $data = [
-            'title' => $this->faker->name(),
-            'description' => $this->faker->sentence(),
-            'id_owner' => $this->user->id
-        ];
+        $this->authUser();
 
-        $this->be($this->user);
+        $data = $this->projectData();
+
         $this->get('/projects/create')->assertStatus(200);
         $this->post('/projects', $data)->assertRedirect('/projects');
         $this->assertDatabaseHas('projects', $data);
@@ -56,7 +53,7 @@ class ProjectTest extends TestCase
     {
         $attributes = Project::factory()->raw(['title' => '']);
 
-        $this->be($this->user);
+        $this->authUser();
         $this->post('/projects',$attributes)->assertSessionHasErrors('title');
     }
 
@@ -65,9 +62,8 @@ class ProjectTest extends TestCase
      */
     public function a_project_require_a_description()
     {
+        $this->authUser();
         $attributes = Project::factory()->raw(['description' => '']);
-
-        $this->be($this->user);
         $this->post('/projects',$attributes)->assertSessionHasErrors('description');
     }
 
@@ -76,39 +72,11 @@ class ProjectTest extends TestCase
      */
     public function only_auth_user_can_view_a_project()
     {
-        $project = Project::factory()->create(['id_owner' => $this->user->id]);
-
-        $this->be($this->user);
-        $this->get($project->path())->assertSee($project->title);
+        $this->authUser();
+        $data = $this->projectData();
+        $this->post('/projects', $data)->assertRedirect('/projects');
+        $this->assertDatabaseHas('projects', $data);
+        $this->get('/projects')->assertSee($data['title']);
     }
 
-    /**
-     * @test
-     */
-    public function only_auth_user_can_view_an_owner()
-    {
-        $attributes = Project::factory()->raw([]);
-
-        $this->post('/projects',$attributes)->assertRedirect('login');
-    }
-
-    /**
-     * @test
-     */
-    public function only_auth_user_can_view_page_create_project()
-    {
-        $this->get('/projects/create')->assertRedirect('login');
-    }
-
-    /**
-     * @test
-     */
-
-    public function an_auth_user_can_view_projects_from_other()
-    {
-        $project = Project::factory()->create();
-
-        $this->be($this->user);
-        $this->get($project->path())->assertStatus(403);
-    }
 }

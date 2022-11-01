@@ -20,8 +20,14 @@ class Project extends Model
         return $this->hasOne(User::class, 'id', 'id_owner');
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'id_project', 'id');
+    }
+
     public function path()
     {
         return "/projects/{$this->id}";
     }
+    
 }
