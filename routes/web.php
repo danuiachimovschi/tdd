@@ -26,6 +26,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login');
 //Core
 Route::get('/', [HomeController::class, 'index']);
 Route::group(['middleware' => 'auth'], function(){
+    Route::patch("/tasks/{task}/completed", [ProjectTaskController::class, 'completed'])->name('tasks.completed');
     Route::post("/projects/{project}/tasks", [ProjectTaskController::class, 'create'])->name('tasks.create');
     Route::resource('projects', ProjectController::class);
 });

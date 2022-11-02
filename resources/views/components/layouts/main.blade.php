@@ -57,6 +57,7 @@
       <div class="w-[1200px] mt-20  mx-auto flex justify-center items-center">
         {{ $slot }}
       </div>
+    @yield('script')
     <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
 </body>
 </html>
