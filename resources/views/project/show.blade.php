@@ -27,13 +27,20 @@
         </div>
         <div class="flex justify-between w-full items-start">
             <div class="flex flex-col items-start w-full flex-wrap">
-                <div class="">
+                <div class="w-full">
                     @forelse ($project->tasks as $task)
-                        <figure class="mx-auto max-w-screen-md text-center">
-                            <svg aria-hidden="true" class="mx-auto mb-3 w-12 h-12 text-gray-400 dark:text-gray-600" viewBox="0 0 24 27" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.017 18L14.017 10.609C14.017 4.905 17.748 1.039 23 0L23.995 2.151C21.563 3.068 20 5.789 20 8H24V18H14.017ZM0 18V10.609C0 4.905 3.748 1.038 9 0L9.996 2.151C7.563 3.068 6 5.789 6 8H9.983L9.983 18L0 18Z" fill="currentColor"/></svg>
+                        <figure class="my-8 mx-auto max-w-screen-md text-center flex items-center justify-between w-full">
                             <blockquote>
                                 <p class="text-2xl italic font-medium text-gray-900 dark:text-white">{{ $task->body }}</p>
                             </blockquote>
+                            <form action="{{ route('tasks.completed', ['task' => $task->id]) }}" method="POST">
+                                @csrf
+                                @method("PATCH")
+                                <div class="flex items-center">
+                                    <input @checked($task->completed) id="checked-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onchange="this.form.submit()">
+                                    <label for="checked-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Completed</label>
+                                </div>
+                            </form>
                         </figure>
                     @empty
                         <h1 class="text-3xl mt-10 font-extrabold dark:text-white">Nothing</h1>

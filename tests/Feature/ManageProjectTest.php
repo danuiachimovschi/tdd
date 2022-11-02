@@ -9,6 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ManageProjectTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * @test
      */
