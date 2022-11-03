@@ -22,7 +22,7 @@ class Project extends Model
 
     public function tasks()
     {
-        return $this->hasMany(Task::class, 'id_project', 'id');
+        return $this->hasMany(Task::class, 'id_project', 'id')->latest();
     }
 
     public function path()

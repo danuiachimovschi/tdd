@@ -26,7 +26,7 @@ class ProjectTaskController extends Controller
                 'completed' => !$task->completed
             ]);
             
-            return redirect()->route('project.show', ['project' => $task->id_project]);
+            return redirect()->route('projects.show', ['project' => $task->id_project]);
         }
 
         abort(403);
